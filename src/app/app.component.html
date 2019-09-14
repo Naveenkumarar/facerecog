@@ -1,0 +1,58 @@
+<div style="text-align:center">
+  <h1>
+    Ngx-Webcam Demo
+  </h1>
+</div>
+
+<div class="row">
+  <div class="column" >
+    <div>
+      <webcam [height]="500" [width]="500" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+              [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
+              [videoOptions]="videoOptions"
+              [imageQuality]="1"
+              (cameraSwitched)="cameraWasSwitched($event)"
+              (initError)="handleInitError($event)"
+      ></webcam>
+      <br/>
+      <button class="actionBtn" (click)="triggerSnapshot();" [disabled]="!showWebcam">Take A Snapshot</button>
+      <button class="actionBtn" (click)="toggleWebcam();">Toggle Webcam</button>
+      <br/>
+      <input id="cameraSwitchCheckbox" type="checkbox" name="checkbox " [(ngModel)]="allowCameraSwitch"><label for="cameraSwitchCheckbox">Allow Camera Switch</label>
+      <br/>
+     
+    </div>
+  </div>
+  <div class="column" ><span style="color:red;" *ngIf="message">{{message}}</span>
+   <input #file type="file" accept='image/*' (change)="preview(file.files)" />
+   <p>Upload image file. Supported format are jpeg,png,jpg</p>
+   <img [src]="imgURL" height="200" *ngIf="imgURL">
+   <button (click)="uploadok()" *ngIf="imgURL" >Select</button>
+  </div>
+</div>
+
+
+<div class="snapshot" *ngIf="picshow" style="text-align:right">
+  <img [src]="picurl"/>
+  <button (click)="uploadServer()">Upload Server</button>
+</div>
+
+<h4 *ngIf="errors.length > 0">Messages:</h4>
+<ul *ngFor="let error of errors">
+  <li>{{error | json}}</li>
+</ul>
+
+
+<div id="popup1" class="overlay" *ngIf="pop">
+	<div class="popup">
+		<h2>Person mismatch </h2>
+		<a class="close" href="#" (click)="popclose()">&times;</a>
+		<div class="content">
+      Did you want the below image to add in database?<br>
+        If no, close the tab.<br>
+        <img [src]="picurl" style="width: 200px;height:200px"/><br>
+        Label name: <input type="text" name="labelname" [(ngModel)]="labelname" required><br>
+        <button (click)="uploadpic()">Upload Server</button>
+    </div>
+	</div>
+</div>
